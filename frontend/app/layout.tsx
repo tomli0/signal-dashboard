@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import LayoutShell from "@/components/LayoutShell";
+import AppShell from "@/components/AppShell";
 
 export const metadata: Metadata = {
   title: "Signal Dashboard",
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <LayoutShell>{children}</LayoutShell>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
