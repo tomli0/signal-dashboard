@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Card from "@/components/Card";
 import KpiCard from "@/components/KpiCard";
-import { getProjectOverview } from "../overviewData";
+import { fetchProjectDashboard } from "@/lib/api";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -13,8 +13,29 @@ function statusClass(status: string) {
 
 export default async function ProjectOverviewPage({ params }: Props) {
   const { id } = await params;
-  const { project, kpis, needsAttention, upcomingMilestones, recentUpdates } =
-    getProjectOverview(id);
+  let data;
+  try {
+    data = await fetchProjectDashboard(id);
+  } catch (e) {
+    const is404 = e instanceof Error && "status" in e && (e as Error & { status: number }).status === 404;
+    return (
+      <div className="space-y-6">
+        <h1 className="text-xl font-semibold text-white">Project not found</h1>
+        <Card title="Error">
+          <p className="text-white/80 text-sm">
+            {is404
+              ? `No project with id "${id}". `
+              : "Failed to load project. "}
+            <Link href="/projects" className="text-dashboard-kpi hover:underline">
+              Back to project register
+            </Link>
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  const { project, kpis, needsAttention, upcomingMilestones, recentUpdates } = data;
 
   if (!project) {
     return (
@@ -34,7 +55,6 @@ export default async function ProjectOverviewPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
-      {/* 1. Project header */}
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
         <div>
           <h1 className="text-xl font-semibold text-white">{project.name}</h1>
@@ -60,7 +80,6 @@ export default async function ProjectOverviewPage({ params }: Props) {
         </dl>
       </header>
 
-      {/* 2. KPI row */}
       <section aria-label="Key metrics" className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         <KpiCard value={`${kpis.progress}%`} label="Progress" />
         <KpiCard value={kpis.openDecisions} label="Open decisions" />
@@ -70,7 +89,6 @@ export default async function ProjectOverviewPage({ params }: Props) {
         <KpiCard value={kpis.hoursThisMonth} label="Hours this month" />
       </section>
 
-      {/* 3. Needs attention + 4. Upcoming milestones + 5. Recent updates */}
       <div className="grid gap-6 lg:grid-cols-3">
         <Card title="Needs attention">
           {needsAttention.length === 0 ? (

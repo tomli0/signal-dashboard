@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1.routes import projects
+from app.api.v1.routes import dashboard, projects
 
 app = FastAPI(
     title="Signal Dashboard API",
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(projects.router, prefix="/api/v1/projects", tags=["projects"])
+app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["dashboard"])
 
 
 @app.get("/health")

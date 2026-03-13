@@ -1,5 +1,7 @@
 "use client";
 
+import ProjectSwitcher from "./ProjectSwitcher";
+
 export default function Header() {
   return (
     <header
@@ -7,23 +9,7 @@ export default function Header() {
       role="banner"
     >
       <div className="flex items-center gap-4 min-w-0">
-        <div
-          className="flex items-center gap-2 px-3 py-2 rounded border border-white/20 bg-white/5 text-white/80 text-sm cursor-pointer hover:border-white/30 hover:text-white transition-colors"
-          role="button"
-          tabIndex={0}
-          aria-label="Switch project"
-        >
-          <span className="truncate">Project</span>
-          <svg
-            className="w-4 h-4 shrink-0 text-white/60"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+        <ProjectSwitcher />
         <div className="hidden sm:block w-64">
           <input
             type="search"
