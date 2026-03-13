@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --dashboard-bg: #1E2869;
+  --dashboard-kpi: #F6A23A;
+  --text-primary: #ffffff;
+}
+
+body {
+  background-color: var(--dashboard-bg);
+  color: var(--text-primary);
+}
